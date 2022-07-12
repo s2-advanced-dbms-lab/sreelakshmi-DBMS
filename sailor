@@ -1,0 +1,88 @@
+mysql> create table sailor(sid int,sname varchar(10),rating float,age int);
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> desc sailor;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | int(11)     | YES  |     | NULL    |       |
+| sname  | varchar(10) | YES  |     | NULL    |       |
+| rating | float       | YES  |     | NULL    |       |
+| age    | int(11)     | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> create table reserves(sid int,bid int,day int);
+Query OK, 0 rows affected (0.40 sec)
+
+mysql> desc reserves;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| sid   | int(11) | YES  |     | NULL    |       |
+| bid   | int(11) | YES  |     | NULL    |       |
+| day   | int(11) | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> create table boat(bid int,bname varchar(10),bcolor varchar(10));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> desc boat;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| bid    | int(11)     | YES  |     | NULL    |       |
+| bname  | varchar(10) | YES  |     | NULL    |       |
+| bcolor | varchar(10) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> select S.sname from sailors S where S.sid not in(select R.sid from reserves R where R.bid in(select B.sid from boat B where B.bcolor="Red"));
++---------+
+| sname   |
++---------+
+| Horatio |
+| Denis   |
+| Harley  |
+| Dain    |
+| Jaison  |
++---------+
+5 rows in set (0.08 sec)
+
+mysql> select S1.sname from sailors S1 where S1.rating > any(select S2 .rating from sailors S2);
++---------+
+| sname   |
++---------+
+| Horatio |
+| Denis   |
+| Dain    |
+| Jaison  |
++---------+
+4 rows in set (0.00 sec)
+
+mysql> select S.sname,S.age from sailors S where S.age=(select max(S2.age)from sailors S2 where S2.rating=10);
++-------+------+
+| sname | age  |
++-------+------+
+| Denis |   40 |
++-------+------+
+1 row in set (0.00 sec)
+
+mysql> select S1.sname from sailors S1 where S1.rating >= all(select S2 .rating from sailors S2);
++-------+
+| sname |
++-------+
+| Denis |
+| Dain  |
++-------+
+2 rows in set (0.00 sec)
+
+mysql> select S.sname,S.age from sailors S where S.age=(select max(S2.age)from sailors S2 where S2.rating=10);
++-------+------+
+| sname | age  |
++-------+------+
+| Denis |   40 |
++-------+------+
+1 row in set (0.00 sec)
+

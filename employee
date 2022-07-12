@@ -1,0 +1,112 @@
+mysql> create table employee(empno int,empname varchar(10),job varchar(10),salary int,deptno int);
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> describe employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| empno   | int(11)     | YES  |     | NULL    |       |
+| empname | varchar(10) | YES  |     | NULL    |       |
+| job     | varchar(10) | YES  |     | NULL    |       |
+| salary  | int(11)     | YES  |     | NULL    |       |
+| deptno  | int(11)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table employee add experience int;
+Query OK, 0 rows affected (0.43 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empno      | int(11)     | YES  |     | NULL    |       |
+| empname    | varchar(10) | YES  |     | NULL    |       |
+| job        | varchar(10) | YES  |     | NULL    |       |
+| salary     | int(11)     | YES  |     | NULL    |       |
+| deptno     | int(11)     | YES  |     | NULL    |       |
+| experience | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table employee modify job varchar(20);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>  alter table employee drop column experience;
+Query OK, 0 rows affected (0.49 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| empno   | int(11)     | YES  |     | NULL    |       |
+| empname | varchar(10) | YES  |     | NULL    |       |
+| job     | varchar(20) | YES  |     | NULL    |       |
+| salary  | int(11)     | YES  |     | NULL    |       |
+| deptno  | int(11)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from employee where deptno=29;
++-------+---------+---------+--------+--------+
+| empno | empname | job     | salary | deptno |
++-------+---------+---------+--------+--------+
+|     1 | Anu     | Teacher |  25000 |     29 |
+|     4 | Arjun   | Teacher |  25500 |     29 |
++-------+---------+---------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct deptno from employee;
++--------+
+| deptno |
++--------+
+|     29 |
+|     28 |
+|     27 |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee where job like "M%";
++-------+---------+----------+--------+--------+
+| empno | empname | job      | salary | deptno |
++-------+---------+----------+--------+--------+
+|     2 | Anoop   | Manager  |  30000 |     28 |
+|     3 | Paul    | Mechanic |  20000 |     27 |
++-------+---------+----------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select empname from employee where job=(select job from employee where empname="Arjun");
++---------+
+| empname |
++---------+
+| Anu     |
+| Arjun   |
++---------+
+2 rows in set (0.00 sec)
+
+mysql> select count(empno) from employee;
++--------------+
+| count(empno) |
++--------------+
+|            4 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select salary from employee where salary=(select min(salary) from employee)union select salary from employee where salary =(select max(salary) from employee);
++--------+
+| salary |
++--------+
+|  20000 |
+|  30000 |
++--------+
+2 rows in set (0.00 sec)
+
+
+
+

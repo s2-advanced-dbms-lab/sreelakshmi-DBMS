@@ -1,0 +1,9 @@
+begin
+  2  dbms_output.put_line('Hello guys!');
+  3  end;
+  4  /
+Hello guys!
+
+PL/SQL procedure successfully completed.
+
+

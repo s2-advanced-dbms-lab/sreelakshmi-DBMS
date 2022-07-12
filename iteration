@@ -1,0 +1,14 @@
+begin
+  2  for no in 1..5 loop
+  3  dbms_output.put_line('Iteration:'||no);
+  4  end loop;
+  5  end;
+  6  /
+Iteration:1
+Iteration:2
+Iteration:3
+Iteration:4
+Iteration:5
+
+PL/SQL procedure successfully completed.
+

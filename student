@@ -1,0 +1,145 @@
+mysql> create table student(sid int primary key,sname varchar(10),course varchar(20),sem int);
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> insert into student(sid,sname,course,sem)values(1,'Sree','Electrical',4);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into student(sid,sname,course,sem)values(2,'Anee','MBA',3);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into student(sid,sname,course,sem)values(3,'Anila','MCA',2);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into student(sid,sname,course,sem)values(4,'Aami','Btech',4);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student(sid,sname,course,sem)values(5,'Reepa','MCA',1);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into student(sid,sname,course,sem)values(6,'Anu','Btech',2);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student;
++-----+-------+------------+------+
+| sid | sname | course     | sem  |
++-----+-------+------------+------+
+|   1 | Sree  | Electrical |    4 |
+|   2 | Anee  | MBA        |    3 |
+|   3 | Anila | MCA        |    2 |
+|   4 | Aami  | Btech      |    4 |
+|   5 | Reepa | MCA        |    1 |
+|   6 | Anu   | Btech      |    2 |
++-----+-------+------------+------+
+6 rows in set (0.00 sec)
+
+create table book(bid int primary key,bname varchar(20),author varchar(20));
+
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> insert into book(bid,bname,author)values(100,'Maths','Peter');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book(bid,bname,author)values(101,'Business','John');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book(bid,bname,author)values(102,'DS','James');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into book(bid,bname,author)values(103,'C','George T S');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into book(bid,bname,author)values(104,'CPP','Dennis');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book(bid,bname,author)values(105,'Java','David');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from book;
++-----+----------+------------+
+| bid | bname    | author     |
++-----+----------+------------+
+| 100 | Maths    | Peter      |
+| 101 | Business | John       |
+| 102 | DS       | James      |
+| 103 | C        | George T S |
+| 104 | CPP      | Dennis     |
+| 105 | Java     | David      |
++-----+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> create table issue(bid int references book(bid),sid int references student(sid),issuedate date);
+Query OK, 0 rows affected (0.39 sec)
+
+mysql> insert into issue values(102,3,"2019-04-17");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into issue values(103,2,"2018-05-19");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into issue values(105,5,"2017-07-12");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into issue values(104,4,"2010-10-10");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into issue values(107,6,"2015-02-11");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into issue values(108,7,"2016-03-19");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from issue;
++------+------+------------+
+| bid  | sid  | issuedate  |
++------+------+------------+
+|  100 |    1 | 2020-02-11 |
+|  102 |    3 | 2019-04-17 |
+|  103 |    2 | 2018-05-19 |
+|  105 |    5 | 2017-07-12 |
+|  104 |    4 | 2010-10-10 |
+|  107 |    6 | 2015-02-11 |
+|  108 |    7 | 2016-03-19 |
++------+------+------------+
+7 rows in set (0.00 sec)
+
+select book.bname,issuedate from book inner join issue on book.bid where issuedate="2015-10-31";
+
+mysql> select book.bname,issuedate from book inner join issue on book.bid where issuedate="2015-10-31";
+Empty set (0.01 sec)
+
+mysql> select student.* from student inner join issue on student.sid=issue.sid where issue.bid=(select book.bid from book inner join issue on book.bid=issue.bid where book.bname="Java" group by book.bid);
++-----+-------+--------+------+
+| sid | sname | course | sem  |
++-----+-------+--------+------+
+|   5 | Reepa | MCA    |    1 |
++-----+-------+--------+------+
+1 row in set (0.03 sec)
+
+mysql> select student.sname as 4thsemstudents from student inner join issue on student.sid=issue.sid where student.sem=4 group by student.sname;
++----------------+
+| 4thsemstudents |
++----------------+
+| Aami           |
+| Sree           |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> select book.bname as bookname from book inner join issue on book.bid=issue.bid where issue.sid=(select student.sid from student inner join issue on student.sid=issue.sid where student.sname="Reepa");
++----------+
+| bookname |
++----------+
+| Java     |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select student.sname from student inner join issue on student.sid=issue.sid where issue.bid=(select book.bid from book inner join issue on book.bid=issue.bid where book.author="Peter" group by book.bid);
++-------+
+| sname |
++-------+
+| Sree  |
++-------+
+1 row in set (0.00 sec)
+
+
+
+

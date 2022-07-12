@@ -1,0 +1,26 @@
+declare
+  2  a number:=10;
+  3  b number:=12;
+  4  c number:=5;
+  5  begin
+  6   dbms_output.put_line('a='||a||',b='||b||',c='||c);
+  7  if a>b AND a>c
+  8  then
+  9   dbms_output.put_line('a is greatest');
+ 10  else
+ 11  if b>a AND b>c
+ 12  then
+ 13   dbms_output.put_line('b is greatest');
+ 14  else
+ 15   dbms_output.put_line('c is greatest');
+ 16  end if;
+ 17  end if;
+ 18  end;
+ 19  /
+a=10,b=12,c=5
+b is greatest
+
+PL/SQL procedure successfully completed.
+
+
+

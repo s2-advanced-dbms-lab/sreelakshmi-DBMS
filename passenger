@@ -1,0 +1,97 @@
+mysql> create table passenger(pnrno int,tno int,name varchar(10),age int,gender varchar(10),cno bigint(50));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> describe passenger;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| pnrno  | int(11)     | YES  |     | NULL    |       |
+| tno    | int(11)     | YES  |     | NULL    |       |
+| name   | varchar(10) | YES  |     | NULL    |       |
+| age    | int(11)     | YES  |     | NULL    |       |
+| gender | varchar(10) | YES  |     | NULL    |       |
+| cno    | bigint(50)  | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> insert into passenger(pnrno,tno,name,age,gender,cno)values(1,101,'Arjun',31,'M',9446253192);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into passenger(pnrno,tno,name,age,gender,cno)values(2,102,'Ryan',29,'M',9446253191);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into passenger(pnrno,tno,name,age,gender,cno)values(3,103,'Mary',31,'f',8281590767);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into passenger(pnrno,tno,name,age,gender,cno)values(4,104,'Sandrea',21,'f',7356530678);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from passenger;
++-------+------+---------+------+--------+------------+
+| pnrno | tno  | name    | age  | gender | cno        |
++-------+------+---------+------+--------+------------+
+|     1 |  101 | Arjun   |   25 | M      | 9442021310 |
+|     2 |  102 | Ryan    |   29 | M      | 9446253191 |
+|     3 |  103 | Mary    |   31 | f      | 8281590767 |
+|     4 |  104 | Sandrea |   21 | f      | 7356530678 |
++-------+------+---------+------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct pnrno from passenger;
++-------+
+| pnrno |
++-------+
+|     1 |
+|     2 |
+|     3 |
+|     4 |
++-------+
+4 rows in set (0.00 sec)
+
+mysql> select name from passenger order by name asc;
++---------+
+| name    |
++---------+
+| Arjun   |
+| Mary    |
+| Ryan    |
+| Sandrea |
++---------+
+4 rows in set (0.00 sec)
+
+mysql> select tno from passenger where name like 'R%n';
++------+
+| tno  |
++------+
+|  102 |
++------+
+1 row in set (0.03 sec)
+
+
+
+mysql> select count(pnrno) from passenger;
++--------------+
+| count(pnrno) |
++--------------+
+|            4 |
++--------------+
+1 row in set (0.03 sec)
+
+mysql> select age from passenger where age+(select min(age)from passenger)union select age from passenger where age+(select max(age)from passenger);
++------+
+| age  |
++------+
+|   25 |
+|   29 |
+|   31 |
+|   21 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> select sum(age) as sumage,avg(age)as avgage from passenger;
++--------+---------+
+| sumage | avgage  |
++--------+---------+
+|    106 | 26.5000 |
++--------+---------+
+1 row in set (0.00 sec)

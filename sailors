@@ -1,0 +1,114 @@
+mysql> create table sailors(sid int primary key,sname varchar(10),rating float,age int);
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> insert into sailors values(20,"Horatio",9,55);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into sailors values(21,"Denis",10,40);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into sailors values(22,"Harley",5.5,50);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into sailors values(23,"Dain",10,36);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into sailors values(24,"Jaison",6,50);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from sailors;
++-----+---------+--------+------+
+| sid | sname   | rating | age  |
++-----+---------+--------+------+
+|  20 | Horatio |      9 |   55 |
+|  21 | Denis   |     10 |   40 |
+|  22 | Harley  |    5.5 |   50 |
+|  23 | Dain    |     10 |   36 |
+|  24 | Jaison  |      6 |   50 |
++-----+---------+--------+------+
+5 rows in set (0.00 sec)
+
+mysql> create table boat(bid int primary key,bname varchar(10),bcolor varchar(10));
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> insert into boat values(101,"Island","Blue");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into boat values(102,"Speed","Red");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into boat values(103,"Wind","Green");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into boat values(104,"Marine","White");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from boat;
++-----+--------+--------+
+| bid | bname  | bcolor |
++-----+--------+--------+
+| 101 | Island | Blue   |
+| 102 | Speed  | Red    |
+| 103 | Wind   | Green  |
+| 104 | Marine | White  |
++-----+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> create table reserves(sid int,bid int,day varchar(10),primary key(sid,bid,day),foreign key (sid) references sailors(sid),foreign key (bid) references boat(sid));
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> insert into reserves values(22,101,"Monday");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into reserves values(24,104,"Wednesday");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into reserves values(22,101,"Friday");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into reserves values(22,101,"Sunday");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from reserves;
++-----+-----+-----------+
+| sid | bid | day       |
++-----+-----+-----------+
+|  22 | 101 | Friday    |
+|  22 | 101 | Monday    |
+|  22 | 101 | Sunday    |
+|  24 | 104 | Wednesday |
++-----+-----+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select S.sid from sailors S where S.rating=10 union select R.sid from reserves R where R.bid=104;
++-----+
+| sid |
++-----+
+|  21 |
+|  23 |
+|  24 |
++-----+
+3 rows in set (0.00 sec)
+
+mysql> select sid,sname from sailors where sid in(select sid from reserves where bid in(select bid from boat where bcolor in("Red","Green")));
++-----+--------+
+| sid | sname  |
++-----+--------+
+|  22 | Harley |
+|  24 | Jaison |
++-----+--------+
+2 rows in set (0.00 sec)
+
+mysql> select S.sname from sailors S,boat B1,reserves R1,boat B2,reserves R2 where S.sid=R1.sid and R1.bid=B1.bid and S.sid=R2.sid and R2.bid=B2.bid and B1.bcolor="Red" and B2.bcolor="Green";
++----+---+
+| sname  |
++--------+
+|Denis   | 
+|Harley  |        |
++--------+
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+SQL> Declare
+  2  a integer;
+  3  b integer;
+  4  c integer;
+  5  begin
+  6  a:=10;
+  7  b:=20;
+  8  c:=a+b;
+  9  dbms_output.put_line('Sum of 2 numbers');
+ 10  dbms_output.put_line(c);
+ 11  end;
+ 12  /
+Sum of 2 numbers
+30
+
+PL/SQL procedure successfully completed.
+
